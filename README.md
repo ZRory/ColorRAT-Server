@@ -16,7 +16,7 @@ java -jar server.jar
 
 ## Meta 
 
-Timo B. - support@aragonapp.eu
+Timo Behrend - @timobehrend - support@aragonapp.eu
 
 Distributed under the Apache license. See [LICENSE](https://www.apache.org/licenses/LICENSE-2.0) for more information.
 
