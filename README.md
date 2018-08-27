@@ -1,23 +1,23 @@
 # ColorRAT - Server
 > A simple java RAT which you can use to control other computers
 
-## Installation
+### Installation
 
 OSX X & Linux & Windows
 
-```sh
+```
 java -jar server.jar
-````
+```
 
-## Release History
+### Release History
 
+```
 * 0.0.1
     * First release of the project
+```
 
-## Meta 
 
-Timo Behrend - @timobehrend - support@aragonapp.eu
 
-Distributed under the Apache license. See [LICENSE](https://www.apache.org/licenses/LICENSE-2.0) for more information.
+### License
 
-[https://github.com/Excse](https://github.com/Excse/)
+This project is licensed under the Apache License 2.0  see the LICENSE.md file for details.
