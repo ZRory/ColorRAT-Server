@@ -42,12 +42,13 @@ public class ConsoleThread extends ColorThread {
             ColorServer.getLogger().info("|   --| . | | . |  _|    -|     | | |    |___|  |__   | -_|  _| | | -_|  _|");
             ColorServer.getLogger().info("|_____|___|_|___|_| |__|__|__|__| |_|           |_____|___|_|  \\_/|___|_| ");
             ColorServer.getLogger().info("                                                Version 1.0 by Timo Behrend");
-            ColorServer.getLogger().info("If you need help type \"-help\" into the console.");
+            ColorServer.getLogger().info("If you need help type \"help\" into the console.");
 
             String line;
             while ((line = reader.readLine(prompt, prompt, (MaskingCallback) null, null)) != null) {
                 if (line == null) return;
 
+                ColorServer.getInstance().getCommandManager().check(line);
                 ColorServer.getLogger().log(prompt + line);
             }
         } catch (Exception ex) {

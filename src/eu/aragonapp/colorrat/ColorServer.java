@@ -1,5 +1,6 @@
 package eu.aragonapp.colorrat;
 
+import eu.aragonapp.colorrat.command.CommandManager;
 import eu.aragonapp.colorrat.network.NetworkConnection;
 import eu.aragonapp.colorrat.network.thread.types.AcceptThread;
 import eu.aragonapp.colorrat.network.thread.types.ConsoleThread;
@@ -26,6 +27,7 @@ public class ColorServer {
     private static Logger logger;
 
     private final ArrayList<NetworkConnection> clients;
+    private final CommandManager commandManager;
 
     private final ConsoleThread consoleThread;
     private final AcceptThread acceptThread;
@@ -50,6 +52,9 @@ public class ColorServer {
         this.setRunning(true);
         this.acceptThread = new AcceptThread();
         this.acceptThread.start();
+
+        this.commandManager = new CommandManager();
+
         this.consoleThread = new ConsoleThread();
         this.consoleThread.start();
     }
@@ -60,6 +65,10 @@ public class ColorServer {
 
     public ArrayList<NetworkConnection> getClients() {
         return clients;
+    }
+
+    public CommandManager getCommandManager() {
+        return commandManager;
     }
 
     public void setRunning(boolean running) {
