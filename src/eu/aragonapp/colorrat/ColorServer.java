@@ -8,6 +8,7 @@ import eu.aragonapp.colorrat.utils.$;
 import java.net.ServerSocket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * @Copyright (c) 2018 Mythic Inc. (http://www.mythic.com/) All Rights Reserved.
@@ -22,7 +23,7 @@ public class ColorServer {
 
     private static ColorServer instance;
 
-    private final List<NetworkConnection> clients;
+    private final CopyOnWriteArrayList<NetworkConnection> clients;
 
     private final DisconnectThread disconnectThread;
     private final AcceptThread acceptThread;
@@ -33,7 +34,7 @@ public class ColorServer {
     public ColorServer() {
         instance = this;
 
-        this.clients = new ArrayList<>();
+        this.clients = new CopyOnWriteArrayList<>();
 
         try {
             this.socket = new ServerSocket($.PORT);
@@ -50,7 +51,7 @@ public class ColorServer {
     }
 
 
-    public List<NetworkConnection> getClients() {
+    public CopyOnWriteArrayList<NetworkConnection> getClients() {
         return clients;
     }
 

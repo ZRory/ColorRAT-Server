@@ -34,7 +34,7 @@ public class AcceptThread extends ColorThread {
             if(socket == null) return;
             socket.setKeepAlive(true);
 
-            //TODO("Connected message & duplicated connection check")
+            System.out.println("New Connection!");
 
             final NetworkConnection connection = new NetworkConnection(socket);
             ColorServer.getInstance().getClients().add(connection);

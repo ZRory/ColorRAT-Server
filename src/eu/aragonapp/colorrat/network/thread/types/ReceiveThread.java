@@ -37,7 +37,7 @@ public class ReceiveThread extends ColorThread {
 
             ((Packet) object).execute(this.connection);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            this.connection.stop();
         }
     }
 

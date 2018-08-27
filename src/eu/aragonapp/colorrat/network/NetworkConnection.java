@@ -34,7 +34,6 @@ public class NetworkConnection implements Serializable {
             this.outputStream = new ObjectOutputStream(this.socket.getOutputStream());
             this.inputStream = new ObjectInputStream(this.socket.getInputStream());
         } catch (Exception ex) {
-            ex.printStackTrace();
             this.stop();
             return;
         }
@@ -44,31 +43,29 @@ public class NetworkConnection implements Serializable {
     }
 
     public boolean write(Packet packet) {
-        if(this.outputStream == null) throw new NullPointerException("Output Stream is null!");
-
         try {
             this.outputStream.writeObject(packet);
             this.outputStream.flush();
             return true;
         } catch (Exception ex) {
-            ex.printStackTrace();
             return false;
         }
     }
 
     public Object readObject() throws Exception {
-        if(this.inputStream == null) throw new NullPointerException("Input Stream is null!");
-
-        return this.inputStream.readObject();
+        if (this.inputStream.available() > 0)
+            return this.inputStream.readObject();
+        return null;
     }
 
     public void stop() {
-        if(this.receiveThread != null)
+        if (this.receiveThread != null)
             this.receiveThread.close();
 
-        ColorServer.getInstance().getClients().remove(this);
-
+        System.out.println("Connection disconnected!!");
         //TODO("Disconnect message")
+
+        ColorServer.getInstance().getClients().remove(this);
     }
 
 }
