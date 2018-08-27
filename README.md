@@ -11,12 +11,8 @@ java -jar server.jar
 
 ### Release History
 
-```
 * 0.0.1
     * First release of the project
-```
-
-
 
 ### License
 
