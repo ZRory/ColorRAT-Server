@@ -29,11 +29,7 @@ public class ReceiveThread extends ColorThread {
 
     @Override
     public void run() {
-        System.out.println("New Connection!");
-
-        while(!this.connection.getSocket().isClosed() && ColorServer.getInstance().isRunning()) {
-            System.out.println(this.connection.getSocket().isConnected() + ", " + this.connection.getSocket().isClosed());
-
+        while (!this.connection.getSocket().isClosed() && ColorServer.getInstance().isRunning()) {
             try {
                 final Object object = getInformations().getInputStream().readObject();
                 if (!(object instanceof Packet)) return;
@@ -41,11 +37,11 @@ public class ReceiveThread extends ColorThread {
             } catch (SocketException | EOFException ex) {
                 this.connection.stop();
             } catch (Exception ex) {
-                System.out.println("Couldn't handle packet: " + ex.getMessage());
+                ColorServer.getLogger().error("Couldn't handle packet: " + ex.getMessage());
             }
         }
 
-        System.out.println("Connection closed!");
+        ColorServer.getLogger().info("Client disconnected.. (" + this.connection.getSocket().getInetAddress().getHostName() + ")");
         ColorServer.getInstance().getClients().remove(this.connection);
     }
 
