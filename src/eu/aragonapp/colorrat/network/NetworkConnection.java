@@ -44,6 +44,8 @@ public class NetworkConnection implements Serializable {
     }
 
     public boolean write(Packet packet) {
+        if(this.outputStream == null) throw new NullPointerException("Output Stream is null!");
+
         try {
             this.outputStream.writeObject(packet);
             this.outputStream.flush();
@@ -55,6 +57,8 @@ public class NetworkConnection implements Serializable {
     }
 
     public Object readObject() throws Exception {
+        if(this.inputStream == null) throw new NullPointerException("Input Stream is null!");
+
         return this.inputStream.readObject();
     }
 

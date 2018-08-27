@@ -31,10 +31,14 @@ public class ReceiveThread extends ColorThread {
             return;
         }
 
-        final Object object = getInformations().readObject();
-        if (!(object instanceof Packet)) return;
+        try {
+            final Object object = getInformations().readObject();
+            if (!(object instanceof Packet)) return;
 
-        ((Packet) object).execute(this.connection);
+            ((Packet) object).execute(this.connection);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     public NetworkConnection getInformations() {
