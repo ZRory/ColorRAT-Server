@@ -6,7 +6,7 @@
 OSX X & Linux & Windows
 
 ```
-java -jar server.jar
+java -jar colorrat-server.jar
 ```
 
 ### Release History
