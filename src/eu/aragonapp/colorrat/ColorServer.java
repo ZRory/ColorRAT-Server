@@ -2,13 +2,10 @@ package eu.aragonapp.colorrat;
 
 import eu.aragonapp.colorrat.network.NetworkConnection;
 import eu.aragonapp.colorrat.network.thread.types.AcceptThread;
-import eu.aragonapp.colorrat.network.thread.types.DisconnectThread;
 import eu.aragonapp.colorrat.utils.$;
 
 import java.net.ServerSocket;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * @Copyright (c) 2018 Mythic Inc. (http://www.mythic.com/) All Rights Reserved.
@@ -23,9 +20,8 @@ public class ColorServer {
 
     private static ColorServer instance;
 
-    private final CopyOnWriteArrayList<NetworkConnection> clients;
+    private final ArrayList<NetworkConnection> clients;
 
-    private final DisconnectThread disconnectThread;
     private final AcceptThread acceptThread;
 
     private ServerSocket socket;
@@ -34,7 +30,7 @@ public class ColorServer {
     public ColorServer() {
         instance = this;
 
-        this.clients = new CopyOnWriteArrayList<>();
+        this.clients = new ArrayList<>();
 
         try {
             this.socket = new ServerSocket($.PORT);
@@ -46,12 +42,10 @@ public class ColorServer {
         this.setRunning(true);
         this.acceptThread = new AcceptThread();
         this.acceptThread.start();
-        this.disconnectThread = new DisconnectThread();
-        this.disconnectThread.start();
     }
 
 
-    public CopyOnWriteArrayList<NetworkConnection> getClients() {
+    public ArrayList<NetworkConnection> getClients() {
         return clients;
     }
 

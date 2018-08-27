@@ -4,6 +4,8 @@ import eu.aragonapp.colorrat.ColorServer;
 import eu.aragonapp.colorrat.network.NetworkConnection;
 import eu.aragonapp.colorrat.network.thread.ColorThread;
 
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 /**
@@ -22,24 +24,22 @@ public class AcceptThread extends ColorThread {
     }
 
     @Override
-    public void update() {
-        if(!ColorServer.getInstance().isRunning()) {
-            this.close();
-            return;
-        }
+    public void run() {
+        while (ColorServer.getInstance().isRunning()) {
+            try {
+                final Socket socket = ColorServer.getInstance().getSocket().accept();
 
-        try {
-            final Socket socket = ColorServer.getInstance().getSocket().accept();
+                if (socket == null) return;
+                socket.setKeepAlive(true);
 
-            if(socket == null) return;
-            socket.setKeepAlive(true);
+                final NetworkConnection connection = new NetworkConnection(socket, new ObjectOutputStream(socket.getOutputStream()), new ObjectInputStream(socket.getInputStream()));
+                ColorServer.getInstance().getClients().add(connection);
 
-            System.out.println("New Connection!");
-
-            final NetworkConnection connection = new NetworkConnection(socket);
-            ColorServer.getInstance().getClients().add(connection);
-        } catch (Exception ex) {
-            ex.printStackTrace();
+                final ReceiveThread receiveThread = new ReceiveThread(connection);
+                receiveThread.start();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
         }
     }
 

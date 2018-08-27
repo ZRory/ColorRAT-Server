@@ -5,6 +5,9 @@ import eu.aragonapp.colorrat.network.NetworkConnection;
 import eu.aragonapp.colorrat.network.packet.Packet;
 import eu.aragonapp.colorrat.network.thread.ColorThread;
 
+import java.io.EOFException;
+import java.net.SocketException;
+
 /**
  * @Copyright (c) 2018 Mythic Inc. (http://www.mythic.com/) All Rights Reserved.
  * <p>
@@ -25,20 +28,25 @@ public class ReceiveThread extends ColorThread {
     }
 
     @Override
-    public void update() {
-        if(!ColorServer.getInstance().isRunning()) {
-            this.close();
-            return;
+    public void run() {
+        System.out.println("New Connection!");
+
+        while(!this.connection.getSocket().isClosed() && ColorServer.getInstance().isRunning()) {
+            System.out.println(this.connection.getSocket().isConnected() + ", " + this.connection.getSocket().isClosed());
+
+            try {
+                final Object object = getInformations().getInputStream().readObject();
+                if (!(object instanceof Packet)) return;
+                ((Packet) object).execute(this.connection);
+            } catch (SocketException | EOFException ex) {
+                this.connection.stop();
+            } catch (Exception ex) {
+                System.out.println("Couldn't handle packet: " + ex.getMessage());
+            }
         }
 
-        try {
-            final Object object = getInformations().readObject();
-            if (!(object instanceof Packet)) return;
-
-            ((Packet) object).execute(this.connection);
-        } catch (Exception ex) {
-            this.connection.stop();
-        }
+        System.out.println("Connection closed!");
+        ColorServer.getInstance().getClients().remove(this.connection);
     }
 
     public NetworkConnection getInformations() {

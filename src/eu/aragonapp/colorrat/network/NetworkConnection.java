@@ -23,23 +23,13 @@ public class NetworkConnection implements Serializable {
     private ObjectOutputStream outputStream;
     private ObjectInputStream inputStream;
 
-    private ReceiveThread receiveThread;
-
     private final Socket socket;
 
-    public NetworkConnection(Socket socket) {
+    public NetworkConnection(Socket socket, ObjectOutputStream outputStream, ObjectInputStream inputStream) {
         this.socket = socket;
 
-        try {
-            this.outputStream = new ObjectOutputStream(this.socket.getOutputStream());
-            this.inputStream = new ObjectInputStream(this.socket.getInputStream());
-        } catch (Exception ex) {
-            this.stop();
-            return;
-        }
-
-        this.receiveThread = new ReceiveThread(this);
-        this.receiveThread.start();
+        this.outputStream = outputStream;
+        this.inputStream = inputStream;
     }
 
     public boolean write(Packet packet) {
@@ -52,20 +42,23 @@ public class NetworkConnection implements Serializable {
         }
     }
 
-    public Object readObject() throws Exception {
-        if (this.inputStream.available() > 0)
-            return this.inputStream.readObject();
-        return null;
+    public void stop() {
+        try {
+            this.outputStream.close();
+            this.inputStream.close();
+            this.socket.close();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        ColorServer.getInstance().getClients().remove(this);
     }
 
-    public void stop() {
-        if (this.receiveThread != null)
-            this.receiveThread.close();
+    public ObjectInputStream getInputStream() {
+        return inputStream;
+    }
 
-        System.out.println("Connection disconnected!!");
-        //TODO("Disconnect message")
-
-        ColorServer.getInstance().getClients().remove(this);
+    public Socket getSocket() {
+        return socket;
     }
 
 }
