@@ -42,7 +42,7 @@ public class ConsoleThread extends ColorThread {
             ColorServer.getLogger().info("|   --| . | | . |  _|    -|     | | |    |___|  |__   | -_|  _| | | -_|  _|");
             ColorServer.getLogger().info("|_____|___|_|___|_| |__|__|__|__| |_|           |_____|___|_|  \\_/|___|_| ");
             ColorServer.getLogger().info("                                                Version 1.0 by Timo Behrend");
-            ColorServer.getLogger().info("If you need help type \"help\" into the console.");
+            ColorServer.getLogger().info("If you need help type \"\033[4;1mhelp\033[0m\" into the console.");
 
             String line;
             while ((line = reader.readLine(prompt, prompt, (MaskingCallback) null, null)) != null) {

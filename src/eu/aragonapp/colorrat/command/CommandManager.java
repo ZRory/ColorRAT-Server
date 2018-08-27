@@ -37,7 +37,7 @@ public class CommandManager {
             if(!command.execute(args))
                 ColorServer.getLogger().error(command.usage());
         } catch (Exception ex) {
-            ColorServer.getLogger().info("If you need help type \"help\" into the console.");
+            ColorServer.getLogger().info("If you need help type \"\033[4;1mhelp\033[0m\" into the console.");
         }
     }
 

