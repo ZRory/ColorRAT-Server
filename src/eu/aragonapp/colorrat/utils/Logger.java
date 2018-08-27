@@ -45,45 +45,36 @@ public class Logger {
         }
     }
 
-    public void log(String message) {
-        try {
-            writer.write(message + "\r\n");
-            writer.flush();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
     public void info(String message) {
-        try {
-            reader.callWidget(LineReader.CLEAR);
-            terminal.writer().println("[INFO: " + Thread.currentThread().getName() + "/" + DATE_FORMAT.format(new Date()) + "] " + message);
-            reader.callWidget(LineReader.REDRAW_LINE);
-            reader.callWidget(LineReader.REDISPLAY);
-        } catch (Exception ex) {
-            System.out.println("[INFO: " + Thread.currentThread().getName() + "/" + DATE_FORMAT.format(new Date()) + "] " + message);
-        }
-
-        try {
-            writer.write("[INFO: " + Thread.currentThread().getName() + "/" + DATE_FORMAT.format(new Date()) + "] " + message + "\r\n");
-            writer.flush();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+        final String res = "[INFO: " + Thread.currentThread().getName() + "/" + DATE_FORMAT.format(new Date()) + "] " + message;
+        tryElseWrite(res);
+        write(res);
     }
 
     public void error(String message) {
+        final String res = "[ERROR: " + Thread.currentThread().getName() + "/" + DATE_FORMAT.format(new Date()) + "] " + message;
+        tryElseWrite(res);
+        write(res);
+    }
+
+    public void log(String message) {
+        write(message);
+    }
+
+    private void tryElseWrite(String message) {
         try {
             reader.callWidget(LineReader.CLEAR);
-            terminal.writer().println("[ERROR: " + Thread.currentThread().getName() + "/" + DATE_FORMAT.format(new Date()) + "] " + message);
+            terminal.writer().println(message);
             reader.callWidget(LineReader.REDRAW_LINE);
             reader.callWidget(LineReader.REDISPLAY);
         } catch (Exception ex) {
-            System.out.println("[ERROR: " + Thread.currentThread().getName() + "/" + DATE_FORMAT.format(new Date()) + "] " + message);
+            System.out.println(message);
         }
+    }
 
+    private void write(String message) {
         try {
-            writer.write("[ERROR: " + Thread.currentThread().getName() + "/" + DATE_FORMAT.format(new Date()) + "] " + message + "\r\n");
+            writer.write(message + "\r\n");
             writer.flush();
         } catch (Exception ex) {
             ex.printStackTrace();

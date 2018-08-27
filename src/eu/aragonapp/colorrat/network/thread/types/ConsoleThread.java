@@ -48,8 +48,8 @@ public class ConsoleThread extends ColorThread {
             while ((line = reader.readLine(prompt, prompt, (MaskingCallback) null, null)) != null) {
                 if (line == null) return;
 
-                ColorServer.getInstance().getCommandManager().check(line);
                 ColorServer.getLogger().log(prompt + line);
+                ColorServer.getInstance().getCommandManager().check(line);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
