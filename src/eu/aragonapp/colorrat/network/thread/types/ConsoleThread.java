@@ -44,10 +44,9 @@ public class ConsoleThread extends ColorThread {
             ColorServer.getLogger().info("                                                Version 1.0 by Timo Behrend");
             ColorServer.getLogger().info("If you need help type \"-help\" into the console.");
 
-            while (true) {
-                String line = reader.readLine(prompt, prompt, (MaskingCallback) null, null);
-
-                if (line == null) continue;
+            String line;
+            while ((line = reader.readLine(prompt, prompt, (MaskingCallback) null, null)) != null) {
+                if (line == null) return;
 
                 ColorServer.getLogger().log(prompt + line);
             }

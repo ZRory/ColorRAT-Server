@@ -56,12 +56,12 @@ public class Logger {
 
     public void info(String message) {
         try {
-            terminal.writer().println("[INFO: " + Thread.currentThread().getName() + "/" + DATE_FORMAT.format(new Date()) + "] " + message);
-        } catch (Exception ex) {
             reader.callWidget(LineReader.CLEAR);
             terminal.writer().println("[INFO: " + Thread.currentThread().getName() + "/" + DATE_FORMAT.format(new Date()) + "] " + message);
             reader.callWidget(LineReader.REDRAW_LINE);
             reader.callWidget(LineReader.REDISPLAY);
+        } catch (Exception ex) {
+            System.out.println("[INFO: " + Thread.currentThread().getName() + "/" + DATE_FORMAT.format(new Date()) + "] " + message);
         }
 
         try {
@@ -74,12 +74,12 @@ public class Logger {
 
     public void error(String message) {
         try {
-            terminal.writer().println("[ERROR: " + Thread.currentThread().getName() + "/" + DATE_FORMAT.format(new Date()) + "] " + message);
-        } catch (Exception ex) {
             reader.callWidget(LineReader.CLEAR);
             terminal.writer().println("[ERROR: " + Thread.currentThread().getName() + "/" + DATE_FORMAT.format(new Date()) + "] " + message);
             reader.callWidget(LineReader.REDRAW_LINE);
             reader.callWidget(LineReader.REDISPLAY);
+        } catch (Exception ex) {
+            System.out.println("[ERROR: " + Thread.currentThread().getName() + "/" + DATE_FORMAT.format(new Date()) + "] " + message);
         }
 
         try {

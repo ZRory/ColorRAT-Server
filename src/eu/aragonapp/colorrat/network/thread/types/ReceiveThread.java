@@ -22,7 +22,7 @@ public class ReceiveThread extends ColorThread {
     private final NetworkConnection connection;
 
     public ReceiveThread(NetworkConnection connection) {
-        super("Receive(" + connection.hashCode() + ")-Thread");
+        super("Receive");
 
         this.connection = connection;
     }
