@@ -27,6 +27,7 @@ public class NetworkConnection implements Serializable {
     private final ObjectInputStream inputStream;
 
     private String username, os, region, javaVersion;
+    private ReceiveThread receiveThread;
 
     private final Listener listener;
     private final Socket socket;
@@ -71,8 +72,20 @@ public class NetworkConnection implements Serializable {
         this.username = username;
     }
 
+    public ReceiveThread getReceiveThread() {
+        return this.receiveThread;
+    }
+
     public ObjectInputStream getInputStream() {
         return inputStream;
+    }
+
+    public void setReceiveThread(ReceiveThread receiveThread) {
+        if(this.receiveThread != null)
+            this.receiveThread.close();
+
+        this.receiveThread = receiveThread;
+        this.receiveThread.start();
     }
 
     public void setRegion(String region) {

@@ -61,7 +61,6 @@ public class ConsoleThread extends ColorThread {
                 }
             }
             terminal.close();
-            this.close();
         } catch (Exception ex) {
             ex.printStackTrace();
         }

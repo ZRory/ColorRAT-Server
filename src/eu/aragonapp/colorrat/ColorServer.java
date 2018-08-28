@@ -5,6 +5,7 @@ import eu.aragonapp.colorrat.network.NetworkConnection;
 import eu.aragonapp.colorrat.network.listener.Listener;
 import eu.aragonapp.colorrat.network.thread.types.AcceptThread;
 import eu.aragonapp.colorrat.network.thread.types.ConsoleThread;
+import eu.aragonapp.colorrat.network.thread.types.KeepAliveThread;
 import eu.aragonapp.colorrat.utils.$;
 import eu.aragonapp.colorrat.utils.Logger;
 
@@ -31,6 +32,8 @@ public class ColorServer {
     private final ArrayList<Listener> listeners;
 
     private final CommandManager commandManager;
+
+    private final KeepAliveThread keepAliveThread;
     private final ConsoleThread consoleThread;
 
     private NetworkConnection selectedConnection;
@@ -49,17 +52,23 @@ public class ColorServer {
 
         this.consoleThread = new ConsoleThread();
         this.consoleThread.start();
+        this.keepAliveThread = new KeepAliveThread();
+        this.keepAliveThread.start();
 
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> this.close()));
+        Runtime.getRuntime().addShutdownHook(new Thread(this::close));
     }
 
     public void close() {
         setRunning(false);
 
+        for(NetworkConnection connection : this.clients)
+            connection.getReceiveThread().close();
+
         for (Listener listener : this.listeners)
             listener.close();
 
-        getLogger().log("> ");
+        this.keepAliveThread.close();
+        this.consoleThread.close();
     }
 
     public NetworkConnection getSelectedConnection() {

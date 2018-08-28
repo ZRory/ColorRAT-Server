@@ -5,6 +5,7 @@ import eu.aragonapp.colorrat.network.NetworkConnection;
 import eu.aragonapp.colorrat.network.listener.Listener;
 import eu.aragonapp.colorrat.network.thread.ColorThread;
 
+import java.io.EOFException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
@@ -46,13 +47,14 @@ public class AcceptThread extends ColorThread {
                 socket.setKeepAlive(true);
 
                 final NetworkConnection connection = new NetworkConnection(socket, this.listener, new ObjectOutputStream(socket.getOutputStream()), new ObjectInputStream(socket.getInputStream()));
+                connection.setReceiveThread(new ReceiveThread(connection));
                 ColorServer.getInstance().getClients().add(connection);
-
-                final ReceiveThread receiveThread = new ReceiveThread(connection);
-                receiveThread.start();
             } catch (Exception ex) {
                 if (ex instanceof SocketException && !ColorServer.getInstance().isRunning()) continue;
-
+                if(ex instanceof EOFException) {
+                    this.close();
+                    return;
+                }
                 ex.printStackTrace();
             }
         }
