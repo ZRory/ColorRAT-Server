@@ -33,6 +33,7 @@ public class ColorServer {
     private final CommandManager commandManager;
     private final ConsoleThread consoleThread;
 
+    private NetworkConnection selectedConnection;
     private boolean running;
 
     public ColorServer() {
@@ -49,12 +50,24 @@ public class ColorServer {
         this.consoleThread = new ConsoleThread();
         this.consoleThread.start();
 
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            ColorServer.getInstance().setRunning(false);
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> this.close()));
+    }
 
-            for (Listener listener : ColorServer.getInstance().getListeners())
-                listener.close();
-        }));
+    public void close() {
+        setRunning(false);
+
+        for (Listener listener : this.listeners)
+            listener.close();
+
+        getLogger().log("> ");
+    }
+
+    public NetworkConnection getSelectedConnection() {
+        return this.selectedConnection;
+    }
+
+    public void setSelectedConnection(NetworkConnection selectedConnection) {
+        this.selectedConnection = selectedConnection;
     }
 
     public static void setLogger(Logger logger) {

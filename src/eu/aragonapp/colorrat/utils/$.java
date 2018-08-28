@@ -14,4 +14,7 @@ public class $ {
     public static final boolean DEV_BUILD = true;
     public static final int PORT = 1337;
 
+    public static final String AUTHOR = "Timo Behrend";
+    public static final double VERSION = 1.0;
+
 }

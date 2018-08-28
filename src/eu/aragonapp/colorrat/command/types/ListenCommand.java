@@ -3,7 +3,6 @@ package eu.aragonapp.colorrat.command.types;
 import eu.aragonapp.colorrat.ColorServer;
 import eu.aragonapp.colorrat.command.Command;
 import eu.aragonapp.colorrat.network.listener.Listener;
-import eu.aragonapp.colorrat.utils.Color;
 
 /**
  * @Copyright (c) 2018 Mythic Inc. (http://www.mythic.com/) All Rights Reserved.
@@ -24,13 +23,13 @@ public class ListenCommand implements Command {
             try {
                 port = Integer.valueOf(args[0]);
             } catch (NumberFormatException ex) {
-                ColorServer.getLogger().error("The specified port \"" + Color.underline(args[0]) + "\" is not valid.");
+                ColorServer.getLogger().error("The specified port \"" + args[0] + "\" is not valid.");
                 return true;
             }
 
             final Listener listener = new Listener(port);
             ColorServer.getInstance().getListeners().add(listener);
-            ColorServer.getLogger().info("Successfully created a listener which is listening on " + Color.underline(args[0]));
+            ColorServer.getLogger().info("Successfully created a listener which is listening on " + args[0]);
         }
         return true;
     }

@@ -20,10 +20,7 @@ public class ExitCommand implements Command {
 
     @Override
     public boolean execute(String[] args) {
-        ColorServer.getInstance().setRunning(false);
-
-        for (Listener listener : ColorServer.getInstance().getListeners())
-            listener.close();
+        ColorServer.getInstance().close();
         return true;
     }
 

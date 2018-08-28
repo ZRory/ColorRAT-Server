@@ -2,8 +2,10 @@ package eu.aragonapp.colorrat.network.thread.types;
 
 import eu.aragonapp.colorrat.ColorServer;
 import eu.aragonapp.colorrat.network.thread.ColorThread;
-import eu.aragonapp.colorrat.utils.Color;
+import eu.aragonapp.colorrat.utils.$;
 import eu.aragonapp.colorrat.utils.Logger;
+import eu.aragonapp.injection.Injector;
+import org.jline.reader.EndOfFileException;
 import org.jline.reader.LineReader;
 import org.jline.reader.LineReaderBuilder;
 import org.jline.reader.MaskingCallback;
@@ -42,17 +44,21 @@ public class ConsoleThread extends ColorThread {
             ColorServer.getLogger().info("|     |___| |___ ___| __  |  _  |_   _|   ___   |   __|___ ___ _ _ ___ ___ ");
             ColorServer.getLogger().info("|   --| . | | . |  _|    -|     | | |    |___|  |__   | -_|  _| | | -_|  _|");
             ColorServer.getLogger().info("|_____|___|_|___|_| |__|__|__|__| |_|           |_____|___|_|  \\_/|___|_| ");
-            ColorServer.getLogger().info("                                                Version 1.0 by Timo Behrend");
-            ColorServer.getLogger().info("If you need help type \"" + Color.underline("help") + "\" into the console.");
+            ColorServer.getLogger().info("                                                Version " + $.VERSION + " by " + $.AUTHOR);
+            ColorServer.getLogger().info("If you need help type \"help\" into the console.");
 
             String line;
             while (ColorServer.getInstance().isRunning()) {
-                line = reader.readLine(prompt, prompt, (MaskingCallback) null, null);
+                try {
+                    line = reader.readLine(prompt, prompt, (MaskingCallback) null, null);
 
-                if (line == null || line.isEmpty()) return;
+                    if (line == null || line.isEmpty()) return;
 
-                ColorServer.getLogger().log(prompt + line);
-                ColorServer.getInstance().getCommandManager().check(line);
+                    ColorServer.getLogger().log(prompt + line);
+                    ColorServer.getInstance().getCommandManager().check(line);
+                } catch (EndOfFileException ex) {
+                    ColorServer.getInstance().close();
+                }
             }
             terminal.close();
             this.close();

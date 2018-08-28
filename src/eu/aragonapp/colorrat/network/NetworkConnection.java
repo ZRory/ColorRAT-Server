@@ -10,6 +10,7 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.net.Socket;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * @Copyright (c) 2018 Mythic Inc. (http://www.mythic.com/) All Rights Reserved.
@@ -29,10 +30,13 @@ public class NetworkConnection implements Serializable {
 
     private final Listener listener;
     private final Socket socket;
+    private final String uid;
 
     public NetworkConnection(Socket socket, Listener listener, ObjectOutputStream outputStream, ObjectInputStream inputStream) {
         this.listener = listener;
         this.socket = socket;
+
+        this.uid = UUID.randomUUID().toString().split("-")[0];
 
         this.outputStream = outputStream;
         this.inputStream = inputStream;
@@ -63,44 +67,36 @@ public class NetworkConnection implements Serializable {
         this.javaVersion = javaVersion;
     }
 
-    public ObjectOutputStream getOutputStream() {
-        return this.outputStream;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public ObjectInputStream getInputStream() {
         return inputStream;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
     public void setRegion(String region) {
         this.region = region;
-    }
-
-    public String getJavaVersion() {
-        return this.javaVersion;
     }
 
     public Listener getListener() {
         return this.listener;
     }
 
-    public void setOs(String os) {
-        this.os = os;
-    }
-
     public String getUsername() {
         return this.username;
     }
 
-    public String getRegion() {
-        return this.region;
+    public void setOs(String os) {
+        this.os = os;
     }
 
     public Socket getSocket() {
         return socket;
+    }
+
+    public String getUid() {
+        return this.uid;
     }
 
     public String getOs() {

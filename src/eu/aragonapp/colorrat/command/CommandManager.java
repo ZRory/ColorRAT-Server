@@ -1,10 +1,7 @@
 package eu.aragonapp.colorrat.command;
 
 import eu.aragonapp.colorrat.ColorServer;
-import eu.aragonapp.colorrat.command.types.ExitCommand;
-import eu.aragonapp.colorrat.command.types.HelpCommand;
-import eu.aragonapp.colorrat.command.types.ListenCommand;
-import eu.aragonapp.colorrat.utils.Color;
+import eu.aragonapp.colorrat.command.types.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,8 +24,10 @@ public class CommandManager {
         this.commands = new ArrayList<>();
 
         this.commands.add(new ListenCommand());
+        this.commands.add(new SelectCommand());
         this.commands.add(new HelpCommand());
         this.commands.add(new ExitCommand());
+        this.commands.add(new ListCommand());
     }
 
     public void check(String message) {
@@ -42,7 +41,7 @@ public class CommandManager {
             if (!command.execute(args))
                 ColorServer.getLogger().error(command.usage());
         } catch (Exception ex) {
-            ColorServer.getLogger().info("If you need help type \"" + Color.underline("help") + "\" into the console.");
+            ColorServer.getLogger().info("If you need help type \"help\" into the console.");
         }
     }
 
