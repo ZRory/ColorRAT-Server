@@ -18,7 +18,7 @@ public class ListenCommand implements Command {
     @Override
     public boolean execute(String[] args) {
         if(args.length == 1) {
-            int port = 0;
+            int port;
 
             try {
                 port = Integer.valueOf(args[0]);
@@ -30,8 +30,9 @@ public class ListenCommand implements Command {
             final Listener listener = new Listener(port);
             ColorServer.getInstance().getListeners().add(listener);
             ColorServer.getLogger().info("Successfully created a listener which is listening on " + args[0]);
+            return true;
         }
-        return true;
+        return false;
     }
 
     @Override

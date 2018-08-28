@@ -25,6 +25,7 @@ public class CommandManager {
 
         this.commands.add(new ListenCommand());
         this.commands.add(new SelectCommand());
+        this.commands.add(new BuildCommand());
         this.commands.add(new HelpCommand());
         this.commands.add(new ExitCommand());
         this.commands.add(new ListCommand());
