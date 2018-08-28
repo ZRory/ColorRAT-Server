@@ -2,6 +2,7 @@ package eu.aragonapp.colorrat.network.thread.types;
 
 import eu.aragonapp.colorrat.ColorServer;
 import eu.aragonapp.colorrat.network.thread.ColorThread;
+import eu.aragonapp.colorrat.utils.Color;
 import eu.aragonapp.colorrat.utils.Logger;
 import org.jline.reader.LineReader;
 import org.jline.reader.LineReaderBuilder;
@@ -42,15 +43,19 @@ public class ConsoleThread extends ColorThread {
             ColorServer.getLogger().info("|   --| . | | . |  _|    -|     | | |    |___|  |__   | -_|  _| | | -_|  _|");
             ColorServer.getLogger().info("|_____|___|_|___|_| |__|__|__|__| |_|           |_____|___|_|  \\_/|___|_| ");
             ColorServer.getLogger().info("                                                Version 1.0 by Timo Behrend");
-            ColorServer.getLogger().info("If you need help type \"\033[4;1mhelp\033[0m\" into the console.");
+            ColorServer.getLogger().info("If you need help type \"" + Color.underline("help") + "\" into the console.");
 
             String line;
-            while ((line = reader.readLine(prompt, prompt, (MaskingCallback) null, null)) != null) {
-                if (line == null) return;
+            while (ColorServer.getInstance().isRunning()) {
+                line = reader.readLine(prompt, prompt, (MaskingCallback) null, null);
+
+                if (line == null || line.isEmpty()) return;
 
                 ColorServer.getLogger().log(prompt + line);
                 ColorServer.getInstance().getCommandManager().check(line);
             }
+            terminal.close();
+            this.close();
         } catch (Exception ex) {
             ex.printStackTrace();
         }

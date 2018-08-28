@@ -1,4 +1,4 @@
-package eu.aragonapp.colorrat.network.thread;
+package eu.aragonapp.colorrat.utils;
 
 /**
  * @Copyright (c) 2018 Mythic Inc. (http://www.mythic.com/) All Rights Reserved.
@@ -9,16 +9,10 @@ package eu.aragonapp.colorrat.network.thread;
  * You may obtain a copy of the License at
  * @https://www.apache.org/licenses/LICENSE-2.0
  */
-public abstract class ColorThread extends Thread {
+public class Color {
 
-    public ColorThread(String name) {
-        super(name);
-
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> this.close()));
-    }
-
-    public void close() {
-        this.interrupt();
+    public static String underline(String text) {
+        return "\033[4;1m" + text + "\033[0m";
     }
 
 }

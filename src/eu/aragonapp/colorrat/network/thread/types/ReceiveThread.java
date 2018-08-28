@@ -41,8 +41,9 @@ public class ReceiveThread extends ColorThread {
             }
         }
 
-        ColorServer.getLogger().info("Client disconnected.. (" + this.connection.getSocket().getInetAddress().getHostName() + ")");
+        ColorServer.getLogger().info("Client disconnected.. (@" + this.connection.getUsername().toLowerCase() + "/" + connection.getSocket().getInetAddress().getHostAddress() + ":" + connection.getSocket().getPort() + ")");
         ColorServer.getInstance().getClients().remove(this.connection);
+        this.close();
     }
 
     public NetworkConnection getInformations() {

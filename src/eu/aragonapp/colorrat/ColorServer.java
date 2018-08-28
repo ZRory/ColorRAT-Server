@@ -2,6 +2,7 @@ package eu.aragonapp.colorrat;
 
 import eu.aragonapp.colorrat.command.CommandManager;
 import eu.aragonapp.colorrat.network.NetworkConnection;
+import eu.aragonapp.colorrat.network.listener.Listener;
 import eu.aragonapp.colorrat.network.thread.types.AcceptThread;
 import eu.aragonapp.colorrat.network.thread.types.ConsoleThread;
 import eu.aragonapp.colorrat.utils.$;
@@ -27,12 +28,11 @@ public class ColorServer {
     private static Logger logger;
 
     private final ArrayList<NetworkConnection> clients;
+    private final ArrayList<Listener> listeners;
+
     private final CommandManager commandManager;
-
     private final ConsoleThread consoleThread;
-    private final AcceptThread acceptThread;
 
-    private ServerSocket socket;
     private boolean running;
 
     public ColorServer() {
@@ -40,23 +40,21 @@ public class ColorServer {
 
         instance = this;
 
+        this.listeners = new ArrayList<>();
         this.clients = new ArrayList<>();
 
-        try {
-            this.socket = new ServerSocket($.PORT);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            System.exit(-1);
-        }
-
         this.setRunning(true);
-        this.acceptThread = new AcceptThread();
-        this.acceptThread.start();
-
         this.commandManager = new CommandManager();
 
         this.consoleThread = new ConsoleThread();
         this.consoleThread.start();
+
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            ColorServer.getInstance().setRunning(false);
+
+            for (Listener listener : ColorServer.getInstance().getListeners())
+                listener.close();
+        }));
     }
 
     public static void setLogger(Logger logger) {
@@ -75,16 +73,16 @@ public class ColorServer {
         this.running = running;
     }
 
+    public ArrayList<Listener> getListeners() {
+        return listeners;
+    }
+
     public static ColorServer getInstance() {
         return instance;
     }
 
     public static Logger getLogger() {
         return logger;
-    }
-
-    public ServerSocket getSocket() {
-        return socket;
     }
 
     public boolean isRunning() {

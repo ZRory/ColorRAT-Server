@@ -21,7 +21,12 @@ public class C01PacketInformations extends Packet {
 
     @Override
     public void execute(NetworkConnection connection) {
-        ColorServer.getLogger().info("A new connection! (@\033[4;1m" + this.username.toLowerCase() + "\033[0m/" + connection.getSocket().getInetAddress().getHostAddress() + ":" + connection.getSocket().getPort() + ")");
+        connection.setJavaVersion(this.javaVersion);
+        connection.setUsername(this.username);
+        connection.setRegion(this.region);
+        connection.setOs(this.os);
+
+        ColorServer.getLogger().info("A new connection! (@" + this.username.toLowerCase() + "/" + connection.getSocket().getInetAddress().getHostAddress() + ":" + connection.getSocket().getPort() + ")");
     }
 
     public String getJavaVersion() {

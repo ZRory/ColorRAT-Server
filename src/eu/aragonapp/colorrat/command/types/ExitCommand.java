@@ -2,7 +2,10 @@ package eu.aragonapp.colorrat.command.types;
 
 import eu.aragonapp.colorrat.ColorServer;
 import eu.aragonapp.colorrat.command.Command;
-import eu.aragonapp.colorrat.utils.Color;
+import eu.aragonapp.colorrat.network.listener.Listener;
+import eu.aragonapp.colorrat.utils.$;
+
+import java.net.Socket;
 
 /**
  * @Copyright (c) 2018 Mythic Inc. (http://www.mythic.com/) All Rights Reserved.
@@ -13,32 +16,30 @@ import eu.aragonapp.colorrat.utils.Color;
  * You may obtain a copy of the License at
  * @https://www.apache.org/licenses/LICENSE-2.0
  */
-public class HelpCommand implements Command {
+public class ExitCommand implements Command {
 
     @Override
     public boolean execute(String[] args) {
-        if (args.length == 0) {
-            ColorServer.getLogger().info("A list of " + Color.underline("all") + " commands: ");
-            for(Command command : ColorServer.getInstance().getCommandManager().getCommands())
-                ColorServer.getLogger().info("- " + command.usage() + " » " + command.description());
-            return true;
-        }
-        return false;
+        ColorServer.getInstance().setRunning(false);
+
+        for (Listener listener : ColorServer.getInstance().getListeners())
+            listener.close();
+        return true;
     }
 
     @Override
     public String description() {
-        return "Shows a list of all commands, which you can use";
+        return "Shut downs the program and closes all existing streams and connections";
     }
 
     @Override
     public String usage() {
-        return "help";
+        return "exit";
     }
 
     @Override
     public String name() {
-        return "help";
+        return "exit";
     }
 
 }
